@@ -1,6 +1,8 @@
 Consistence
 ===========
 
+**This package is fork of [`consistence/consistence`](https://github.com/consistence/consistence) that adds support PHP 8.**
+
 PHP offers a lot of handy functionality, but due to its organic growth this is not always easily usable. The aim of this library is to provide consistent approach to PHP's functionality. This means:
 
 * clear and consistent naming patterns
@@ -12,10 +14,10 @@ PHP offers a lot of handy functionality, but due to its organic growth this is n
 Installation
 ------------
 
-Install package [`consistence/consistence`](https://packagist.org/packages/consistence/consistence) with [Composer](https://getcomposer.org/):
+Install package [`slevomat/consistence`](https://packagist.org/packages/slevomat/consistence) with [Composer](https://getcomposer.org/):
 
 ```bash
-composer require consistence/consistence
+composer require slevomat/consistence
 ```
 
 There are no further steps needed, you can start using Consistence whenever suitable in your codebase, see features below.
