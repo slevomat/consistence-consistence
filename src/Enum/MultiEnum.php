@@ -7,8 +7,9 @@ namespace Consistence\Enum;
 use ArrayIterator;
 use Closure;
 use Consistence\Math\Math;
-use Consistence\Type\ArrayType\ArrayType;
 use Consistence\Type\Type;
+use function array_filter;
+use function array_map;
 
 abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggregate
 {
@@ -92,9 +93,9 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 */
 	public static function getMultiByEnums(array $singleEnums): self
 	{
-		return self::getMultiByArray(ArrayType::mapValuesByCallback($singleEnums, function (Enum $singleEnum): int {
+		return self::getMultiByArray(array_map(function (Enum $singleEnum): int {
 			return static::convertSingleEnumToValue($singleEnum);
-		}));
+		}, $singleEnums));
 	}
 
 	/**
@@ -149,9 +150,9 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 */
 	private static function getSingleEnumMappedAvailableValues(string $singleEnumClass): array
 	{
-		return ArrayType::mapValuesByCallback($singleEnumClass::getAvailableValues(), function ($singleEnumValue): int {
+		return array_map(function ($singleEnumValue): int {
 			return static::convertSingleEnumValueToValue($singleEnumValue);
-		});
+		}, $singleEnumClass::getAvailableValues());
 	}
 
 	private function checkSingleEnum(Enum $singleEnum): void
@@ -195,7 +196,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 */
 	public function getValues(): iterable
 	{
-		return ArrayType::filterValuesByCallback(self::getAvailableValues(), function (int $value): bool {
+		return array_filter(self::getAvailableValues(), function (int $value): bool {
 			return $this->containsValue($value);
 		});
 	}
@@ -210,9 +211,9 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 			throw new \Consistence\Enum\NoSingleEnumSpecifiedException(static::class);
 		}
 
-		return ArrayType::mapValuesByCallback($this->getValues(), function (int $value): Enum {
+		return array_map(function (int $value): Enum {
 			return static::convertValueToSingleEnum($value);
-		});
+		}, $this->getValues());
 	}
 
 	/**
@@ -378,7 +379,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 */
 	public function filter(Closure $callback): self
 	{
-		return static::getMultiByEnums(ArrayType::filterValuesByCallback($this->getEnums(), $callback));
+		return static::getMultiByEnums(array_filter($this->getEnums(), $callback));
 	}
 
 	/**
@@ -389,7 +390,7 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 */
 	public function filterValues(Closure $callback): self
 	{
-		return static::getMultiByArray(ArrayType::filterValuesByCallback($this->getValues(), $callback));
+		return static::getMultiByArray(array_filter($this->getValues(), $callback));
 	}
 
 }

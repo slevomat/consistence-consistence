@@ -5,10 +5,10 @@ declare(strict_types = 1);
 namespace Consistence\Enum;
 
 use Consistence\Reflection\ClassReflection;
-use Consistence\Type\ArrayType\ArrayType;
-use Consistence\Type\ArrayType\KeyValuePair;
 use ReflectionClass;
 use ReflectionClassConstant;
+use function array_filter;
+use function in_array;
 
 abstract class Enum extends \Consistence\ObjectPrototype
 {
@@ -63,10 +63,13 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	 */
 	public static function getAvailableEnums(): iterable
 	{
-		$values = static::getAvailableValues();
-		return ArrayType::mapByCallback($values, function (KeyValuePair $pair) {
-			return new KeyValuePair($pair->getKey(), static::get($pair->getValue()));
-		});
+		$enums = [];
+
+		foreach (static::getAvailableValues() as $key => $value) {
+			$enums[$key] = static::get($value);
+		}
+
+		return $enums;
 	}
 
 	/**
@@ -76,25 +79,22 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	{
 		$classReflection = new ReflectionClass(static::class);
 		$declaredConstants = ClassReflection::getDeclaredConstants($classReflection);
-		$declaredPublicConstants = ArrayType::filterValuesByCallback(
+
+		/** @var \ReflectionClassConstant $declaredPublicConstants */
+		$declaredPublicConstants = array_filter(
 			$declaredConstants,
 			function (ReflectionClassConstant $constant): bool {
 				return $constant->isPublic();
 			}
 		);
 
-		return ArrayType::mapByCallback(
-			$declaredPublicConstants,
-			function (KeyValuePair $keyValuePair): KeyValuePair {
-				$constant = $keyValuePair->getValue();
-				assert($constant instanceof ReflectionClassConstant);
+		$enumConstants = [];
 
-				return new KeyValuePair(
-					$constant->getName(),
-					$constant->getValue()
-				);
-			}
-		);
+		foreach ($declaredPublicConstants as $declaredPublicConstant) {
+			$enumConstants[$declaredPublicConstant->getName()] = $declaredPublicConstant->getValue();
+		}
+
+		return $enumConstants;
 	}
 
 	/**
@@ -103,7 +103,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	 */
 	public static function isValidValue($value): bool
 	{
-		return ArrayType::containsValue(static::getAvailableValues(), $value);
+		return in_array($value, static::getAvailableValues(), true);
 	}
 
 	/**
