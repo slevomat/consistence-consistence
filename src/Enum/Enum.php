@@ -38,7 +38,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	 */
 	public static function get($value): self
 	{
-		$index = sprintf('%s::%s', get_called_class(), self::getValueIndex($value));
+		$index = sprintf('%s::%s', static::class, self::getValueIndex($value));
 		if (!isset(self::$instances[$index])) {
 			self::$instances[$index] = new static($value);
 		}
@@ -61,8 +61,8 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	 */
 	public static function getAvailableValues(): iterable
 	{
-		$index = get_called_class();
-		if (!isset(self::$availableValues[$index])) {
+		$index = static::class;
+		if (!isset(self::$availableValues[static::class])) {
 			$availableValues = self::getEnumConstants();
 			static::checkAvailableValues($availableValues);
 			self::$availableValues[$index] = $availableValues;
@@ -87,7 +87,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	 */
 	private static function getEnumConstants(): array
 	{
-		$classReflection = new ReflectionClass(get_called_class());
+		$classReflection = new ReflectionClass(static::class);
 		$declaredConstants = ClassReflection::getDeclaredConstants($classReflection);
 		$declaredPublicConstants = ArrayType::filterValuesByCallback(
 			$declaredConstants,
