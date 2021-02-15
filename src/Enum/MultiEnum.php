@@ -47,7 +47,6 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 	 */
 	protected static function checkAvailableValues(iterable $availableValues): void
 	{
-		parent::checkAvailableValues($availableValues);
 		foreach ($availableValues as $value) {
 			if (!Math::isPowerOfTwo($value)) {
 				throw new \Consistence\Enum\MultiEnumValueIsNotPowerOfTwoException($value, static::class);

@@ -63,9 +63,7 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	{
 		$index = static::class;
 		if (!isset(self::$availableValues[static::class])) {
-			$availableValues = self::getEnumConstants();
-			static::checkAvailableValues($availableValues);
-			self::$availableValues[$index] = $availableValues;
+			self::$availableValues[$index] = self::getEnumConstants();
 		}
 
 		return self::$availableValues[$index];
@@ -108,22 +106,6 @@ abstract class Enum extends \Consistence\ObjectPrototype
 				);
 			}
 		);
-	}
-
-	/**
-	 * @param mixed[] $availableValues
-	 */
-	protected static function checkAvailableValues(iterable $availableValues): void
-	{
-		$index = [];
-		foreach ($availableValues as $value) {
-			Type::checkType($value, 'int|string|float|bool|null');
-			$key = self::getValueIndex($value);
-			if (isset($index[$key])) {
-				throw new \Consistence\Enum\DuplicateValueSpecifiedException($value, static::class);
-			}
-			$index[$key] = true;
-		}
 	}
 
 	/**

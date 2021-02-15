@@ -192,15 +192,4 @@ class EnumTest extends \Consistence\TestCase
 		$this->assertSame($enum->getValue(), $value);
 	}
 
-	public function testDuplicateSpecifiedValues(): void
-	{
-		try {
-			DuplicateValuesEnum::get(DuplicateValuesEnum::BAZ);
-			$this->fail();
-		} catch (\Consistence\Enum\DuplicateValueSpecifiedException $e) {
-			$this->assertSame(DuplicateValuesEnum::FOO, $e->getValue());
-			$this->assertSame(DuplicateValuesEnum::class, $e->getClass());
-		}
-	}
-
 }
