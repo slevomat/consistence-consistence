@@ -7,7 +7,6 @@ namespace Consistence\Enum;
 use Consistence\Reflection\ClassReflection;
 use Consistence\Type\ArrayType\ArrayType;
 use Consistence\Type\ArrayType\KeyValuePair;
-use Consistence\Type\Type;
 use ReflectionClass;
 use ReflectionClassConstant;
 
@@ -38,22 +37,12 @@ abstract class Enum extends \Consistence\ObjectPrototype
 	 */
 	public static function get($value): self
 	{
-		$index = sprintf('%s::%s', static::class, self::getValueIndex($value));
+		$index = sprintf('%s::%s', static::class, $value);
 		if (!isset(self::$instances[$index])) {
 			self::$instances[$index] = new static($value);
 		}
 
 		return self::$instances[$index];
-	}
-
-	/**
-	 * @param mixed $value
-	 * @return string
-	 */
-	private static function getValueIndex($value): string
-	{
-		$type = Type::getType($value);
-		return $value . sprintf('[%s]', $type);
 	}
 
 	/**
