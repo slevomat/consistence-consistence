@@ -20,8 +20,6 @@ class ObjectMixin
 	 */
 	public static function magicCall(object $object, string $name): void
 	{
-		Type::checkType($object, 'object');
-
 		throw new \Consistence\UndefinedMethodException(get_class($object), $name);
 	}
 
@@ -44,8 +42,6 @@ class ObjectMixin
 	 */
 	public static function magicGet(object $object, string $name): void
 	{
-		Type::checkType($object, 'object');
-
 		throw new \Consistence\UndefinedPropertyException(get_class($object), $name);
 	}
 
@@ -57,8 +53,6 @@ class ObjectMixin
 	 */
 	public static function magicSet(object $object, string $name): void
 	{
-		Type::checkType($object, 'object');
-
 		throw new \Consistence\UndefinedPropertyException(get_class($object), $name);
 	}
 
@@ -70,8 +64,6 @@ class ObjectMixin
 	 */
 	public static function magicIsSet(object $object, string $name): void
 	{
-		Type::checkType($object, 'object');
-
 		throw new \Consistence\UndefinedPropertyException(get_class($object), $name);
 	}
 
@@ -83,8 +75,6 @@ class ObjectMixin
 	 */
 	public static function magicUnset(object $object, string $name): void
 	{
-		Type::checkType($object, 'object');
-
 		throw new \Consistence\UndefinedPropertyException(get_class($object), $name);
 	}
 
