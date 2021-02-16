@@ -6,7 +6,6 @@ namespace Consistence\Enum;
 
 use ArrayIterator;
 use Closure;
-use Consistence\Math\Math;
 use Consistence\Type\Type;
 use function array_filter;
 use function array_map;
@@ -36,23 +35,10 @@ abstract class MultiEnum extends \Consistence\Enum\Enum implements \IteratorAggr
 			$availableValues = ($singleEnumClass !== null)
 				? self::getSingleEnumMappedAvailableValues($singleEnumClass)
 				: parent::getAvailableValues();
-			static::checkAvailableValues($availableValues);
 			self::$availableValues[$index] = $availableValues;
 		}
 
 		return self::$availableValues[$index];
-	}
-
-	/**
-	 * @param int[] $availableValues
-	 */
-	protected static function checkAvailableValues(iterable $availableValues): void
-	{
-		foreach ($availableValues as $value) {
-			if (!Math::isPowerOfTwo($value)) {
-				throw new \Consistence\Enum\MultiEnumValueIsNotPowerOfTwoException($value, static::class);
-			}
-		}
 	}
 
 	/**
